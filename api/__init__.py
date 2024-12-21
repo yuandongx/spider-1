@@ -1,5 +1,5 @@
 from .app import app
 
-from .list_stock import *
+from .list import *
 
 __all__ = ["app"]

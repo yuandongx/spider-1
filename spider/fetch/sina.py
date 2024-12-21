@@ -1,56 +1,55 @@
-
+"""
+get data from sina
+"""
+from datetime import datetime
 import requests
 
 
 # https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=40&sort=changepercent&asc=1&node=hs_a&symbol&_s_r_a=init
 
 
-class Sina:
-
-    base_url = 'https://xueqiu.com/'
-    json_api = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData'
+def get(url, payload=None) -> dict:
+    """
+    base method: get data
+    """
     headers = {
         "Accept": "*/*",
         "Content-Type": "application/json",
         "User-Agent": "insomnia/9.3.0-beta.6",
         "Connection": "keep-alive"
     }
+    resp = requests.get(url, params=payload, headers=headers, timeout=30)
+    if resp.status_code == 200:
+        return resp.json()
+    else:
+        return None
 
-    def __init__(self) -> None:
-        self._session = requests.Session()
-        self._cookie = []
-        self._init()
 
-    def _init(self) -> None:
-        payload = {}
-        headers = {
-            "Accept": "*/*",
-            "Content-Type": "text/html",
-            "User-Agent": "insomnia/9.3.0-beta.6"
-        }
-
-        res = self._session.get(self.base_url, headers=headers, data=payload)
-        if res.status_code == 200:
-            for item in res.cookies.items():
-                self._cookie.append('{}={}'.format(*item))
-
-    def get(self, payload=None) -> dict:
-        res = self._session.get(url=self.json_api, params=payload,
-                                headers=self.headers)
-        if res.status_code == 200:
-            return res.json()
-        else:
-            return {}
-
-if __name__ == '__main__':
-    xq = Sina()
+def get_hq_data(params):
+    """
+    get hang qing data
+    """
+    json_api = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData'
     # page=1&num=40&sort=changepercent&asc=1&node=hs_a&symbol&_s_r_a=init
-    payload = {"page": 1,
+    default = {"page": 1,
                "num": 60,
                "sort": "changepercent",
                "asc": 1,
                "symbol": "",
                "node": "hs_a",
                "_s_r_a": "init"}
-    res =  xq.get(payload)
-    print(res)
+    payload = params.get('payload') or default
+    res = get(json_api, payload)
+    date = datetime.now().strftime('%Y%m%d')
+    rtn = []
+    for item in res:
+        item['idx'] = f'{date}@{item["symbol"]}'
+        item['node'] = payload['node']
+        item['date'] = date
+        rtn.append(item)
+    return rtn
+
+
+if __name__ == '__main__':
+    rs = get_hq_data({})
+    print(rs)

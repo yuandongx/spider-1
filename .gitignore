@@ -58,6 +58,7 @@ cover/
 # Django stuff:
 *.log
 local_settings.py
+
 db.sqlite3
 db.sqlite3-journal
 
@@ -147,5 +148,3 @@ nohup.out
 !.vscode/extensions.json
 *.code-workspace
 
-# Local History for Visual Studio Code
-.history/
