@@ -24,8 +24,6 @@ bind = "127.0.0.1:8000"
 
 proc_name='spider1'
 
-# on_starting='on_starting'
-
 daemon=True
 
 worker_class=UvicornWorker

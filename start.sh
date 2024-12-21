@@ -17,11 +17,13 @@ if [ -d "$DATA" ]; then
 else
     mkdir $DATA
 fi
+echo Start app server...
+python -m gunicorn -c gunconfig.py api:app
 
-
+echo Celery beat is starting...
 celery -A spider beat --loglevel  info --logfile $CELERY_BEAT_LOG --schedule $CELERY_SCHEDULE_FILE --detach
 
+echo Celery worker is starting...
 celery -A spider worker --concurrency 3 --loglevel  info --logfile $CELERY_WORKER_LOG
 # celery -A spider worker -l info -P processes -detach
 
-# gunicorn -c gunconfig.py api:app
