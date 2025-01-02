@@ -1,7 +1,7 @@
 from celery import Celery
 from redis import Redis
 from loguru import logger
-from .fetch.xueqiu import XQrequest
+from .fetch.sina import get_hq_node_data as get_sina_hq_data
 from .db import Mgdb
 
 mgdb = Mgdb()
@@ -10,43 +10,29 @@ app = Celery()
 
 app.config_from_object("spider.celeryconfig")
 
-# logger.add()
-
 
 @app.task
-def xueqiu_hq():
+def sina_hq():
     """ 
-    xueqiu_hq
+    sina_hq
     """
-    xq = XQrequest(db=mgdb)
     payload = {"page": 1,
                "size": 60,
                "order": "desc",
                "order_by": "percent",
                "market": "CN",
                "type": "sha"}
-    res = xq.get_hq_data(payload)
-    print(res)
+    res = get_sina_hq_data(payload)
+    data = {
+        "db": "stock",
+        "collection": "hq",
+        "data": res
+    }
+    mgdb.insert_or_update(data)
 
-@app.task
-def xueiqu_stock():
-    """ 
-    xueqiu stock
-    """
-    r = Redis(host='127.0.0.1', port=6379, db=1, decode_responses=True)
-    all_elements = r.lrange('myfllows', 0, -1)
-    xq = XQrequest(db=mgdb)
-    result = []
-    for item in all_elements:
-        params = {
-            "symbol": item,
-            "extend": "detail"
-        }
-        res = xq.get_stock(params)
-        result.append(res)
-        logger.info(f'[{item}]>>>>>{res}')
-    return result
+
 
 
 if __name__ == '__main__':
-    xueqiu_hq.apply()
+    args = []
+    app.worker_main

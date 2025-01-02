@@ -25,7 +25,8 @@ class Mgdb:
         _pass = quote_plus(self.mongo_password)
         uri = f"mongodb://{_user}:{_pass}@{self.mongo_host}"
         self.mongodb_client = MongoClient(uri)
-        self.database = None
+        self.database = self._connect()
+        
 
     def _connect(self):
         self.database = self.mongodb_client.get_default_database(
@@ -41,11 +42,12 @@ class Mgdb:
         """
         更新或插入记录
         """
+        print(f'----> {payload}')
         db = payload['db']
         collection = payload['collection']
         data = payload['data']
         updates = []
-        
+        print(f'----> {db} {collection} {data}')
         for item in data:
             updates.append(UpdateOne({"idx": item['idx']}, {
                            '$set': item}, upsert=True))

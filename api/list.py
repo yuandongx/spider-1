@@ -1,6 +1,7 @@
 """
 get method
 """
+from pymongo import DESCENDING, ASCENDING
 from .app import app
 
 
@@ -12,7 +13,7 @@ def _(item: dict):
 
 
 @app.get('/list/{code}/{date}')
-async def list_myfllow(code: str, date: str):
+async def list_my_follow(code: str, date: str):
     """
     list_item
     """
@@ -55,5 +56,38 @@ async def list_hq(node: str, date: str):
         "count": len(items),
         "msg": 'ok',
         "status": 0
-    }
+    } 
     return rtn
+
+@app.get('/stocks/')
+async def list_stock(date: str=None, node: str=None):
+    _filter = {}
+    if date is not None and  date.isdigit():
+        _filter = {'date': date}
+    else:
+        _filter = None
+    if node:
+        _filter['node'] = node
+    _filter = _filter or None
+    data = app.database.hq.find(filter=_filter,
+      limit=60,
+      sort={'date': DESCENDING, 'ticktime': DESCENDING})
+    tmp = set()
+    items = []
+    
+    for item in await data.to_list():
+        value = _(item) 
+        symbol = value['symbol']
+        if symbol not in tmp:
+            items.append(value)
+            tmp.add(symbol)
+        else:
+            pass
+    rtn = {
+        "data": items,
+        "count": len(items),
+        "msg": 'ok',
+        "status": 0
+    } 
+    return rtn
+

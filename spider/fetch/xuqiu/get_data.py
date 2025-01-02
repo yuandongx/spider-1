@@ -1,14 +1,14 @@
-
 import requests
 
+# https://xueqiu.com/
+# url = "https://xueqiu.com/"
+# https://stock.xueqiu.com/v5/stock/screener/quote/list.json
 
-# https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=40&sort=changepercent&asc=1&node=hs_a&symbol&_s_r_a=init
 
-
-class Sina:
+class XQrequest:
 
     base_url = 'https://xueqiu.com/'
-    json_api = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData'
+    json_api = 'https://stock.xueqiu.com/v5/stock/screener/quote/list.json'
     headers = {
         "Accept": "*/*",
         "Content-Type": "application/json",
@@ -30,6 +30,7 @@ class Sina:
         }
 
         res = self._session.get(self.base_url, headers=headers, data=payload)
+        print(res)
         if res.status_code == 200:
             for item in res.cookies.items():
                 self._cookie.append('{}={}'.format(*item))
@@ -42,15 +43,17 @@ class Sina:
         else:
             return {}
 
+    def post(self, payload=None) -> dict:
+        pass
+
+
 if __name__ == '__main__':
-    xq = Sina()
-    # page=1&num=40&sort=changepercent&asc=1&node=hs_a&symbol&_s_r_a=init
+    xq = XQrequest()
     payload = {"page": 1,
-               "num": 60,
-               "sort": "changepercent",
-               "asc": 1,
-               "symbol": "",
-               "node": "hs_a",
-               "_s_r_a": "init"}
-    res =  xq.get(payload)
+               "size": 60,
+               "order": "desc",
+               "order_by": "percent",
+               "market": "CN",
+               "type": "sha"}
+    res = xq.get(payload)
     print(res)

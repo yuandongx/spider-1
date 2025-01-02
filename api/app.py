@@ -2,6 +2,7 @@ import os
 from logging import info 
 from urllib.parse import quote_plus
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -31,4 +32,14 @@ async def db_lifespan(app: FastAPI):
     app.mongodb_client.close()
 
 
-app: FastAPI = FastAPI(lifespan=db_lifespan)
+app: FastAPI = FastAPI(
+    root_path='/api/v1',
+    lifespan=db_lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],          # 允许所有源域名（生产环境需替换为具体域名）
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # 显式允许 OPTIONS 方法
+    allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
+    expose_headers=["Content-Type", "Authorization"],  # 可选：暴露客户端可读的响应头
+)
+# app: FastAPI = FastAPI()

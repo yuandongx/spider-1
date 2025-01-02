@@ -2,7 +2,7 @@ import uvicorn
 from dotenv import load_dotenv
 
 from api import app
-
+from config import A 
 load_dotenv()
 
 if __name__ == "__main__":
