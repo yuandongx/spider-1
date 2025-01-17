@@ -2,7 +2,7 @@
 
 LOGS=logs
 DATA='data'
-CELERY_SCHEDULE_FILE='data/celerybeat-schedule'
+CELERY_SCHEDULE_FILE='data/celery.beat.schedule'
 CELERY_WORKER_LOG='logs/celery.worker.log'
 CELERY_BEAT_LOG='logs/celery.beat.log'
 

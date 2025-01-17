@@ -12,7 +12,7 @@ def _(item: dict):
 
 
 @app.get('/list/{code}/{date}')
-async def list_myfllow(code: str, date: str):
+async def list_my_follow(code: str, date: str):
     """
     list_item
     """

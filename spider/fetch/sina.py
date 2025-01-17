@@ -2,13 +2,15 @@
 get data from sina
 """
 from datetime import datetime
+from typing import Any
+
 import requests
 
 
 # https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=40&sort=changepercent&asc=1&node=hs_a&symbol&_s_r_a=init
 
 
-def get(url, payload=None) -> dict:
+def get(url, payload=None) -> Any | None:
     """
     base method: get data
     """
