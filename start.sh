@@ -27,4 +27,4 @@ python -m gunicorn -c gunconfig.py api:app
 #celery -A spider worker --concurrency 3 --loglevel  info --logfile $CELERY_WORKER_LOG
 # celery -A spider worker -l info -P processes -detach
 
-tail -200f /dev/null
+#tail -200f /dev/null

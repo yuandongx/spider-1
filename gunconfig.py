@@ -24,6 +24,6 @@ bind = "0.0.0.0:8000"
 
 proc_name = 'spider1'
 
-daemon = True
+# daemon = True
 
 worker_class = UvicornWorker
