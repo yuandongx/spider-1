@@ -18,9 +18,8 @@ else
     mkdir $DATA
 fi
 echo Start app server...
-# shellcheck disable=SC2164
-cd /app/api
-python -m gunicorn -c gunconfig.py api:app
+
+python -m gunicorn -c gunconfig.py main:app
 
 #echo Celery beat is starting...
 #celery -A spider beat --loglevel  info --logfile $CELERY_BEAT_LOG --schedule $CELERY_SCHEDULE_FILE --detach
