@@ -8,5 +8,4 @@ COPY . /app
 
 RUN /usr/local/bin/pip install -r /app/requirements.txt
 
-#ENTRYPOINT [ "/bin/sh", "/app/start.sh"]
-CMD tail -200f /dev/null
+ENTRYPOINT [ "/bin/sh", "/app/start.sh"]
