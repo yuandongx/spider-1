@@ -19,7 +19,9 @@ else
 fi
 echo Start app server...
 
-python -m gunicorn -c gunconfig.py main:app
+# python -m gunicorn -c gunconfig.py main:app
+python  main.py
+
 
 #echo Celery beat is starting...
 #celery -A spider beat --loglevel  info --logfile $CELERY_BEAT_LOG --schedule $CELERY_SCHEDULE_FILE --detach
