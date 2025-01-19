@@ -20,6 +20,7 @@ fi
 echo Start app server...
 
 # python -m gunicorn -c gunconfig.py main:app
+
 python  main.py
 
 
