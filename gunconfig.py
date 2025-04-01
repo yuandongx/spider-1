@@ -3,7 +3,7 @@ import os
 
 from uvicorn_worker import UvicornWorker
 from dotenv import load_dotenv
-import hooks
+
 load_dotenv()
 
 root_path = Path(__file__).absolute().parent
