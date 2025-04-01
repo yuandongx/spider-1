@@ -28,4 +28,4 @@ proc_name = 'spider1'
 
 worker_class = UvicornWorker
 
-on_starting = hooks.on_starting
+# on_starting = hooks.on_starting
