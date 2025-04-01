@@ -19,7 +19,7 @@ else
 fi
 echo Start app server...
 
-python -m gunicorn -c gunconfig.py main:app
+python3 -m gunicorn -c gunconfig.py main:app
 
 
 echo Celery worker is starting...

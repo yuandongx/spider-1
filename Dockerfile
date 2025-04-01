@@ -1,4 +1,4 @@
-FROM python:3.13-alpine3.21
+FROM dong01/app-base
 
 ENV logs=/app/logs
 
@@ -6,8 +6,10 @@ RUN mkdir /app
 
 COPY . /app
 
-RUN /usr/local/bin/pip install -r /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt;\
+    rm -rf ~/.cache/pip/http-v2
 
 WORKDIR /app
 
-ENTRYPOINT [ "/bin/sh", "/app/start.sh"]
+# ENTRYPOINT [ "/bin/sh", "/app/start.sh"]
+CMD [ "tail", "-10f", "/dev/null"]

@@ -1,8 +1,10 @@
 """
 111111
 """
-from spider import xueiqu_stock, xueqiu_hq
+from dotenv import load_dotenv
+from spider.main import sina_hq
 
-
+load_dotenv()
 if __name__ == '__main__':
-    xueqiu_hq.apply()
+    res = sina_hq()
+    res()

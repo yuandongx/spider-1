@@ -58,6 +58,8 @@ def get_hq_data(params):
 
     payload = params.get('payload') 
     res = get(json_api, payload)
+    if res is None:
+        return
     date = datetime.now().strftime('%Y%m%d')
     rtn = []
     for item in res:
@@ -75,7 +77,7 @@ def get_hq_node_data(node):
     result = []
     _now = datetime.now()
     count = get_hq_count(node)
-    logger.info(f'Got hgt_sh count {count}.')
+    logger.info(f'Find {node} has {count} items.')
     p, m = divmod(count, 40)
     if m > 0:
         pages = p + 2
@@ -91,39 +93,17 @@ def get_hq_node_data(node):
                "node": node,
                "_s_r_a": "init"}
         rtn = get_hq_data({"payload": payload, "node": node})
-        result.extend(rtn)
+        if rtn is not None and isinstance(rtn, list):
+            result.extend(rtn)
     _spend = datetime.now() - _now
-    logger.info(f'Got {count} items in {_spend.seconds}s.')
-    return result
+    logger.info(f'Got {len(result)} items in {_spend.seconds}s.')
+    return {"data": result, "count": len(result), "total": count, "node": node}
 
-
-def get_top100(acs=0):
-    # https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?
-    # page=1&num=40&sort=changepercent&asc=1&node=hs_a&symbol=&_s_r_a=init
-    # https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?
-    # page=1&num=40&sort=changepercent&asc=1&node=hs_a&symbol=&_s_r_a=init
-    result = []
-    for i in (1,2,3):
-        params = { "page": i,
-                    "num": 40,
-                    "sort": "changepercent",
-                    "asc": acs,
-                    "symbol": "",
-                    "node": 'hs_a',
-                    "_s_r_a": "init"}
-        rtn = get_hq_data({"payload": payload, "node": node})
-        result.append(rtn)
-
-def get_up100():
-    return get_top100()
-
-def get_down100():
-    return get_top100(1)
 
 
 if __name__ == '__main__':
     # sgt_sz
     # hgt_sh
     # hs_bjs
-    rs = get_hq_node_data("kcb")
-    print(rs)
+    for node in NODES:
+        rs = get_hq_node_data(node)
