@@ -7,10 +7,10 @@ from contextlib import asynccontextmanager
 from motor.motor_asyncio import AsyncIOMotorClient
 
 
-MONGO_USER = os.getenv('MONGO_USER') or 'root'
-MONGO_PASSWORD = os.getenv('MONGO_PASSWORD') or 'example'
-MONGO_HOST = os.getenv('MONGO_HOST') or '127.0.0.1'
-MONGO_PORT = os.getenv('MONGO_PORT') or 27017
+MONGO_USER = os.getenv('APP_MONGO_USER') or 'root'
+MONGO_PASSWORD = os.getenv('APP_MONGO_PASSWORD') or 'example'
+MONGO_HOST = os.getenv('APP_MONGO_HOST') or '127.0.0.1'
+MONGO_PORT = os.getenv('APP_MONGO_PORT') or 27017
 
 @asynccontextmanager
 async def db_lifespan(app: FastAPI):

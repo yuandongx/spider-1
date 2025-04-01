@@ -2,7 +2,7 @@
 
 LOGS=logs
 DATA='data'
-CELERY_SCHEDULE_FILE='data/celery.beat.schedule'
+CELERY_SCHEDULE_FILE='logs/celery.beat.schedule'
 CELERY_WORKER_LOG='logs/celery.worker.log'
 CELERY_BEAT_LOG='logs/celery.beat.log'
 
@@ -19,16 +19,12 @@ else
 fi
 echo Start app server...
 
-# python -m gunicorn -c gunconfig.py main:app
-
-python  main.py
+python -m gunicorn -c gunconfig.py main:app
 
 
-#echo Celery beat is starting...
-#celery -A spider beat --loglevel  info --logfile $CELERY_BEAT_LOG --schedule $CELERY_SCHEDULE_FILE --detach
-#
-#echo Celery worker is starting...
-#celery -A spider worker --concurrency 3 --loglevel  info --logfile $CELERY_WORKER_LOG
-# celery -A spider worker -l info -P processes --detach
+echo Celery worker is starting...
+celery -A spider worker --concurrency 3 --loglevel  info --logfile $CELERY_WORKER_LOG
 
-#tail -200f /dev/null
+
+echo Celery beat is starting...
+celery -A spider beat --loglevel  info --logfile $CELERY_BEAT_LOG --schedule $CELERY_SCHEDULE_FILE --detach

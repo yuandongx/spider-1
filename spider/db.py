@@ -16,10 +16,10 @@ class Mgdb:
     mongodb
     """
     def __init__(self):
-        self.mongo_user = os.getenv('MONGO_USER') or 'root'
-        self.mongo_password = os.getenv('MONGO_PASSWORD') or 'example'
-        self.mongo_host = os.getenv('MONGO_HOST') or '127.0.0.1'
-        self.mongo_port = os.getenv('MONGO_PORT') or 27017
+        self.mongo_user = os.getenv('APP_MONGO_USER') or 'root'
+        self.mongo_password = os.getenv('APP_MONGO_PASSWORD') or 'example'
+        self.mongo_host = os.getenv('APP_MONGO_HOST') or '127.0.0.1'
+        self.mongo_port = os.getenv('APP_MONGO_PORT') or 27017
         self.default_db = 'db'
         _user = quote_plus(self.mongo_user)
         _pass = quote_plus(self.mongo_password)

@@ -13,7 +13,7 @@ CONFIG = {
     "app_prefix" :  'app_prefix',
     "mongo_user" :  'root',
     "mongo_password" : 'example',
-    "mongo_host" : '123.249.22.230',
+    "mongo_host" : '123.249.37.220',
     "mongo_port" :  27017,
     "default_db" : 'stock',
     "default_collection" :  'hq',
@@ -27,17 +27,15 @@ def load_config():
     """
     Load configuration from environment variables.
     """
-    app_env_prefix = CONFIG.get("app_env_prefix", "APP")
+    app_env_prefix = CONFIG.get("app_env_prefix", "APP").upper()
     for key, value in CONFIG.items():
         name = f"{app_env_prefix}_{key.upper()}"
         if name in os.environ:
-            CONFIG[key] = os.environ[key]
+            CONFIG[key] = os.environ[name]
         elif name not in os.environ:
-            os.environ[name] = value
+            os.environ[name] = str(value)
     return CONFIG
 
 
 if __name__ == '__main__':
-    config = Config()
-    print(dir(Config))
-    print(dir(config))
+    pass
