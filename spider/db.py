@@ -18,7 +18,7 @@ class Mgdb:
     def __init__(self):
         self.mongo_user = os.getenv('APP_MONGO_USER') or 'root'
         self.mongo_password = os.getenv('APP_MONGO_PASSWORD') or 'example'
-        self.mongo_host = os.getenv('APP_MONGO_HOST') or '127.0.0.1'
+        self.mongo_host = os.getenv('APP_MONGO_HOST') or '123.249.37.220'
         self.mongo_port = os.getenv('APP_MONGO_PORT') or 27017
         self.default_db = 'db'
         _user = quote_plus(self.mongo_user)
@@ -42,12 +42,13 @@ class Mgdb:
         """
         更新或插入记录
         """
-        print(f'----> {payload}')
+        # print(f'----> {payload}')
         db = payload['db']
         collection = payload['collection']
         data = payload['data']
         updates = []
-        print(f'----> {db} {collection} {data}')
+        if len(data) ==0:
+            return
         for item in data:
             updates.append(UpdateOne({"idx": item['idx']}, {
                            '$set': item}, upsert=True))

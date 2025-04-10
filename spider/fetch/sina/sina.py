@@ -58,6 +58,8 @@ def get_hq_data(params):
 
     payload = params.get('payload') 
     res = get(json_api, payload)
+    if res is None:
+        return
     date = datetime.now().strftime('%Y%m%d')
     rtn = []
     for item in res:
@@ -68,13 +70,13 @@ def get_hq_data(params):
     return rtn
 
 
-def get_hq_node_data(node):
+def get_hq_node_data(data):
     """
     按node查询行情
     """
     result = []
     _now = datetime.now()
-    count = get_hq_count(node)
+    count = get_hq_count('sh_a')
     logger.info(f'Got hgt_sh count {count}.')
     p, m = divmod(count, 40)
     if m > 0:
@@ -88,9 +90,10 @@ def get_hq_node_data(node):
                "sort": "changepercent",
                "asc": 1,
                "symbol": "",
-               "node": node,
+               "node": 'sha',
                "_s_r_a": "init"}
-        rtn = get_hq_data({"payload": payload, "node": node})
+        payload.update(data)
+        rtn = get_hq_data({"payload": payload, "node": data['node']})
         result.extend(rtn)
     _spend = datetime.now() - _now
     logger.info(f'Got {count} items in {_spend.seconds}s.')
