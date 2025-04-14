@@ -94,7 +94,8 @@ def get_hq_node_data(data):
                "_s_r_a": "init"}
         payload.update(data)
         rtn = get_hq_data({"payload": payload, "node": data['node']})
-        result.extend(rtn)
+        if rtn is not None and isinstance(rtn, list):
+            result.extend(rtn)
     _spend = datetime.now() - _now
     logger.info(f'Got {count} items in {_spend.seconds}s.')
     return result
@@ -114,7 +115,7 @@ def get_top100(acs=0):
                     "symbol": "",
                     "node": 'hs_a',
                     "_s_r_a": "init"}
-        rtn = get_hq_data({"payload": payload, "node": node})
+        rtn = get_hq_data({"payload": params, "node": "node"})
         result.append(rtn)
 
 def get_up100():
