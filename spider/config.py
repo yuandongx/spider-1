@@ -1,11 +1,22 @@
 """
 celery config
 """
+import os
+from pathlib import Path
 from huey import SqliteHuey
 
+from .db import Mgdb
 
+# app data dir 
+app_data_dir = os.getenv('APP_DTA_DIR', './data')
+
+# mongodb 
+mgdb = Mgdb()
 # Create a Huey instance with SQLite as the backend
-huey = SqliteHuey('tasks.db', auto_commit=True, store_none=True)
+huey = SqliteHuey('tasks.db',
+                   immediate=True, 
+                   store_none=True,
+                   filename=Path(app_data_dir).joinpath('task.db').as_posix)
 # Set the timezone to UTC
 huey.timezone = 'Asia/Shanghai'
 # Set the result expiration time to 7 days

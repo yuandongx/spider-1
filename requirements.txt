@@ -12,3 +12,4 @@ uvicorn==0.30.6
 uvicorn-worker==0.3.0
 gunicorn==23.0.0
 akshare==1.16.67
+python-dotenv==1.0.1

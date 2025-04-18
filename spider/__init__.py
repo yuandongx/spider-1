@@ -10,41 +10,33 @@
 """
 from datetime import datetime
 
-from celery import Celery
-# from loguru import logger
+from loguru import logger
 
 from .fetch.ak import get_realtime_data
-from .fetch.sina import get_hq_node_data as get_sina_hq_data
-from .db import Mgdb
-from .config import huey as app
+from .fetch.sina import get_hq_node_data as get_sina_hq_data, NODES
 
-mgdb = Mgdb()
+from .config import huey as app, mgdb
 
 
-@app.task
+@app.task()
 def sina_hq():
     """ 
     hs_a
     sz_a
     hs_bjs
     """
-    for node in ('hs_a', 'sz_a', 'hs_bjs'):
-        payload = {"page": 1,
-                "size": 60,
-                "order": "desc",
-                "order_by": "percent",
-                "market": "CN",
-                "node": "sh_a"}
-        res = get_sina_hq_data(payload)
-        data = {
+    date = datetime.now().strftime('%Y%m%d')
+    for node in NODES:
+        res = get_sina_hq_data(node)
+        payload = {
             "db": "stock",
-            "collection": "hq",
-            "data": res
+            "collection": date,
+            "data": res['data']
         }
-        mgdb.insert_or_update(data)
+        mgdb.insert_or_update(payload)
+  
 
-
-@app.task
+@app.task()
 def ak_realtime():
     """
     获取实时数据
@@ -57,6 +49,8 @@ def ak_realtime():
         "data": data
     }
     mgdb.insert_or_update(payload)
+    return data
+
 
 if __name__ == '__main__':
     sina_hq()
