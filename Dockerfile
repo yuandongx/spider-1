@@ -1,4 +1,4 @@
-FROM python:3.13-alpine3.21
+FROM app-base:latest
 
 ENV logs=/app/logs
 
