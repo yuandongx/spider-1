@@ -3,8 +3,8 @@
 from datetime import datetime
 from loguru import logger
 
-from fetch.ak import get_realtime_data , get_stock_zh_a_history
-from config import mgdb
+from .fetch.ak import get_realtime_data , get_stock_zh_a_history
+from .config import mgdb
 
 def realtime():
     """
