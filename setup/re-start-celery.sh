@@ -6,6 +6,13 @@
 # Usage: ./re-start-celery.sh
 
 # Check if the redis-server is running, if not start it
+
+if [ -d "/var/run/redis" ]; then
+    echo "Redis server is running."
+else
+    mkdir /var/run/redis
+fi
+
 `ps -ef | grep 'redis-server' | grep -v grep`
 if [ $? -ne 0 ]; then
     echo "Redis server is not running. Start Redis server first."
