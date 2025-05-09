@@ -13,7 +13,7 @@ else
     mkdir /var/log/redis
 fi
 
-`ps -ef | grep 'redis-server' | grep -v grep`
+ps -ef | grep 'redis-server' | grep -v grep
 if [ $? -ne 0 ]; then
     echo "Redis server is not running. Start Redis server first."
     redis-server ./setup/redis.conf &
