@@ -1,13 +1,44 @@
 #!/bin/bash
 
+# This script is used to restart the Celery worker and beat processes.
+# It kills any existing Celery processes and starts new ones.
+# It also creates necessary directories and log files if they do not exist.
+# Usage: ./re-start-celery.sh
+
+# Check if the logs directory exists, if not create it
+if [ ! -d "logs" ]; then
+    mkdir logs
+    echo 'logs dir created.'
+fi
+
+# Check if the celery.beat.log file exists, if not create it
+if [ -f "$CELERY_BEAT_LOG" ]; then
+    echo 'CELERY_BEAT_LOG is exists.'
+else
+    CELERY_BEAT_LOG='logs/celery.beat.log'
+    echo 'CELERY_BEAT_LOG created.'
+fi
+
+# Check if the celery.worker.log file exists, if not create it
+if [ -f "$CELERY_WORKER_LOG" ]; then
+    echo 'CELERY_WORKER_LOG is exists.'
+else
+    CELERY_WORKER_LOG='logs/celery.worker.log'
+    echo 'CELERY_WORKER_LOG created.'
+fi
+
+# Kill any existing Celery processes
+echo Killing existing Celery processes...
 for i in `ps -ef | grep 'celery' | grep -v grep | awk '{print $3}'`
 do
     echo "kill $i"
     kill -9 $i
 done
 
-echo Celery beat is starting...
+# Start the Celery beat and worker processes
+echo Starting Celery processes...
 celery -A spider beat --loglevel info --logfile $CELERY_BEAT_LOG --schedule $CELERY_SCHEDULE_FILE --detach
 
-echo Celery worker is starting...
+# Start the Celery worker process
+echo Starting Celery worker...
 celery -A spider worker --concurrency 3 --loglevel info --logfile $CELERY_WORKER_LOG
