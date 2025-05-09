@@ -46,8 +46,8 @@ fi
 echo Killing existing Celery processes...
 for i in `ps -ef | grep 'celery' | grep -v grep | awk '{print $2}'`
 do
-    echo "kill $i"
     kill -9 $i
+    echo "Killed process $i"
 done
 
 # Start the Celery beat and worker processes
