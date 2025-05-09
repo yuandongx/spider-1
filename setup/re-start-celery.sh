@@ -52,7 +52,7 @@ do
 done
 
 # Start the Celery beat and worker processes
-echo Starting Celery processes...
+echo Starting Celery beat...
 celery -A spider beat --loglevel info --logfile $CELERY_BEAT_LOG --schedule $CELERY_SCHEDULE_FILE --detach
 
 # Start the Celery worker process
