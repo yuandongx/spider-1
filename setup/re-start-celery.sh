@@ -5,12 +5,6 @@
 # It also creates necessary directories and log files if they do not exist.
 # Usage: ./re-start-celery.sh
 
-# Check if the redis-server is running, if not start it
-if [ -d "/var/run/redis" ]; then
-    echo "Redis server is running."
-else
-    mkdir /var/run/redis
-fi
 
 # Check if the Redis log directory exists, if not create it
 if [ -d "/var/log/redis" ]; then
