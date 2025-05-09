@@ -50,7 +50,7 @@ fi
 
 # Kill any existing Celery processes
 echo Killing existing Celery processes...
-for i in `ps -ef | grep 'celery' | grep -v grep | awk '{print $3}'`
+for i in `ps -ef | grep 'celery' | grep -v grep | awk '{print $2}'`
 do
     echo "kill $i"
     kill -9 $i
