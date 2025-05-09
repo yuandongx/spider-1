@@ -44,7 +44,7 @@ fi
 
 # Kill any existing Celery processes
 echo Killing existing Celery processes...
-ps -ef | grep 'celery' | grep -v grep|grep -v 'setup/re-start-celery.sh' | awk '{print $2}' | xargs kill -9
+ps -ef | grep 'celery' | grep -v grep|grep -v 're-start-celery.sh' | awk '{print $2}' | xargs kill -9
 # for i in `ps -ef | grep 'celery' | grep -v grep | awk '{print $2}'`
 # do
 #     # kill -9 $i
