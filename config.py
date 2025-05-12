@@ -13,6 +13,8 @@ def load_config():
     with _env.open('r', encoding='utf-8') as file:
         lines = file.readline()
         for line in lines:
+            if '=' not in line: # 非法的跳过
+                continue
             key, value = line.strip().split('=', 1)
             config[key] = value
             os.environ[key] = value
