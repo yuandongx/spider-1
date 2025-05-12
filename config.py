@@ -11,7 +11,7 @@ def load_config():
     if not _env.exists():
         raise FileNotFoundError(f"Configuration file '{_env}' not found.")
     with _env.open('r', encoding='utf-8') as file:
-        lines = file.readline()
+        lines = file.readlines()
         for line in lines:
             if '=' not in line: # 非法的跳过
                 continue
