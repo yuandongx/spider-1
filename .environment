@@ -1,1 +1,2 @@
 APP_DTA_DIR='/home/openeuler/workspace/spider-1/data'
+APP_MONGO_HOST=123.249.37.220

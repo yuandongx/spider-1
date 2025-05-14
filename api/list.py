@@ -69,7 +69,7 @@ async def list_stock(date: str=None, node: str=None):
     if node:
         _filter['node'] = node
     _filter = _filter or None
-    data = app.database.hq.find(filter=_filter,
+    data = app.database.daily.find(filter=_filter,
       limit=60,
       sort={'date': DESCENDING, 'ticktime': DESCENDING})
     tmp = set()
