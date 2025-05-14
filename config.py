@@ -7,7 +7,7 @@ def load_config():
     Load configuration from environment variables.
     """
     config = {}
-    _env = Path(__file__).parent.joinpath('.environment')
+    _env = Path(__file__).parent.joinpath('config.ini')
     if not _env.exists():
         raise FileNotFoundError(f"Configuration file '{_env}' not found.")
     with _env.open('r', encoding='utf-8') as file:
