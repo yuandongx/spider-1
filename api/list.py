@@ -60,20 +60,17 @@ async def list_hq(node: str, date: str):
     return rtn
 
 @app.get('/stocks/')
-async def list_stock(date: str=None, node: str=None):
-    _filter = {}
-    if date is not None and  date.isdigit():
-        _filter = {'date': date}
-    else:
-        _filter = None
-    if node:
-        _filter['node'] = node
-    _filter = _filter or None
-    data = app.database.daily.find(filter=_filter,
-      limit=60,
-      sort={'date': DESCENDING, 'ticktime': DESCENDING})
+async def list_stock(prop: str = None, sort: str = None):
+    """
+    list_stock
+    sort: asc, desc
+    prop: symbol, name, price, change, percent
+    """
+    data = app.database.daily.find()
     tmp = set()
     items = []
+    if sort not in ['asc', 'desc']:
+        sort = 'asc'
     
     for item in await data.to_list():
         value = _(item) 
@@ -83,6 +80,9 @@ async def list_stock(date: str=None, node: str=None):
             tmp.add(symbol)
         else:
             pass
+    if prop not in items[0]:
+        prop = 'changepercent'
+    items = sorted(items, key=lambda x: x[prop], reverse=True if sort == 'desc' else False)   
     rtn = {
         "data": items,
         "count": len(items),
