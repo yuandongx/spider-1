@@ -82,7 +82,7 @@ async def list_stock(prop: str = None, sort: str = None):
             pass
     if prop not in items[0]:
         prop = 'changepercent'
-    items = sorted(items, key=lambda x: x[prop], reverse=True if sort == 'desc' else False)   
+    items = sorted(items, key=lambda x: str(x[prop]), reverse=True if sort == 'desc' else False)   
     rtn = {
         "data": items,
         "count": len(items),
