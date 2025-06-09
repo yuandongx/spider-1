@@ -13,6 +13,7 @@ from celery.schedules import crontab
 
 from .ak import realtime, history
 from .sina import sina_hq as get_sina_hq_data
+from .qq import fetch_qq_info
 from .config import app
 
 
@@ -39,6 +40,13 @@ def ak_history():
     获取历史数据
     """
     return history()
+
+@app.task
+def get_qq_info(code: str=None):
+    """
+    获取QQ实时数据
+    """
+    return fetch_qq_info(code)
 
 @app.on_after_configure.connect
 def set_up_add_periodic_tasks(sender: Celery, **kwargs):
