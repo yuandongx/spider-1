@@ -68,7 +68,7 @@ async def get_stock_individual_info(symbol: str):
     if not stock_individual_info_em_df.empty:
         return {
             "statusCode": 200,
-            "data": sanitize_floats(stock_individual_info_em_df.to_dict())
+            "data": sanitize_floats(stock_individual_info_em_df.to_records())
         }
     return {
         "statusCode": 404,
@@ -94,10 +94,14 @@ async def get_stock_bid_ask_em(symbol: str):
 
 
 @app.get("/ak/stock/realtime/{tag}")
-async def get_stock_realtime(tag: str):
+async def get_stock_realtime(tag: str, page: int = 1, page_size: int = 100, sort: str = "成交额"):
     """
     获取股票-个股实时行情
     """
+    result = {
+        "statusCode": 200,
+        "message": "success"
+    }
     if tag == 'sh':
         stock_realtime_df = ak.stock_sh_a_spot_em()
     elif tag == 'sz':
@@ -107,14 +111,16 @@ async def get_stock_realtime(tag: str):
     else:
         stock_realtime_df = None
     if stock_realtime_df is not None and not stock_realtime_df.empty:
-        return {
-            "statusCode": 200,
-            "data": sanitize_floats(stock_realtime_df.to_dict())
-        }
-    return {
-        "statusCode": 404,
-        "message": "not found"
-    }
+        # 处理数据
+        rs_df = stock_realtime_df.sort_values(by=sort, ascending=False)
+        rs_df = rs_df.iloc[(page - 1) * page_size:page * page_size]
+        result["data"] = sanitize_floats(rs_df.to_dict(orient="records"))
+        result["total"] = stock_realtime_df.shape[0]
+    else:
+        result["statusCode"] = 404
+        result["message"] = "not found"
+    return result
+
 
 
 @app.get("/ak/stock/history/")
@@ -137,7 +143,7 @@ async def get_stock_zh_a_history(symbol="000001",
     if not stock_zh_a_hist_df.empty:
         return {
             "statusCode": 200,
-            "data": sanitize_floats(stock_zh_a_hist_df.to_dict())
+            "data": sanitize_floats(stock_zh_a_hist_df.to_dict(orient="records"))
         }
     return {
         "statusCode": 404,

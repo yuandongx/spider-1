@@ -1,10 +1,10 @@
 """
 111111
 """
-from dotenv import load_dotenv
-from spider.main import sina_hq
+from config import load_config
+from spider import get_sina_hq_data
 
-load_dotenv()
 if __name__ == '__main__':
-    res = sina_hq()
-    res()
+    load_config()
+    res = get_sina_hq_data()
+  

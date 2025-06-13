@@ -19,7 +19,7 @@ async def db_lifespan(app: FastAPI):
     _pass = quote_plus(MONGO_PASSWORD)
     uri = f"mongodb://{_user}:{_pass}@{MONGO_HOST}"
     app.mongodb_client = AsyncIOMotorClient(uri)
-    app.database = app.mongodb_client.get_default_database('stock')
+    app.database = app.mongodb_client.get_default_database('stocks')
     ping_response = await app.database.command("ping")
     if int(ping_response["ok"]) != 1:
         raise Exception("Problem connecting to database cluster.")
