@@ -2,9 +2,9 @@
 111111
 """
 from config import load_config
-from spider import get_sina_hq_data
+from spider import update_history
 
 if __name__ == '__main__':
     load_config()
-    res = get_sina_hq_data()
+    res = update_history()
   

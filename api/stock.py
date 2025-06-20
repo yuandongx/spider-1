@@ -12,7 +12,7 @@ def _(item: dict):
 
 
 
-@app.get('/list/{code}/{date}')
+@app.get('/stock/list/{code}/{date}')
 async def list_my_follow(code: str, date: str):
     """
     list_item
@@ -59,14 +59,14 @@ async def list_hq(node: str, date: str):
     } 
     return rtn
 
-@app.get('/stocks/')
+@app.get('/stock/list')
 async def list_stock(prop: str = None, sort: str = None):
     """
     list_stock
     sort: asc, desc
     prop: symbol, name, price, change, percent
     """
-    data = app.database.daily.find()
+    data = app.database.all.find()
     tmp = set()
     items = []
     if sort not in ['asc', 'desc']:

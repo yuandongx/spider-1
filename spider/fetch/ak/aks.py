@@ -40,7 +40,7 @@ def get_realtime_data():
         result.extend(tmp_df.to_dict(orient='records'))
     return result
         
-def get_stock_zh_a_history(symbol="000001", q=0):
+def get_stock_zh_a_history(symbol="000001", q=0, limit=0):
     """
     获取股票-个股历史行情
     """
@@ -65,6 +65,8 @@ def get_stock_zh_a_history(symbol="000001", q=0):
         for col in stock_zh_a_hist_df.columns:  
             stock_zh_a_hist_df[col] = stock_zh_a_hist_df[col].apply(sanitize_dtypes)
         stock_zh_a_hist_df['idx'] = stock_zh_a_hist_df['日期']
+        if limit > 0:
+            stock_zh_a_hist_df = stock_zh_a_hist_df.sort_values(by='日期',ascending=False).head(10)
         return stock_zh_a_hist_df.to_dict(orient="records")
     return []
     

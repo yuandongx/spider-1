@@ -11,7 +11,7 @@
 from celery import Celery
 from celery.schedules import crontab
 
-from .ak import realtime, history
+from .ak import realtime, history, update_history
 from .sina import sina_hq as get_sina_hq_data
 from .qq import fetch_qq_info
 from .config import app

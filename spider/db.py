@@ -44,7 +44,6 @@ class Mgdb:
         """
         更新或插入记录
         """
-        # print(f'----> {payload}')
         db = payload['db']
         collection = payload['collection']
         data = payload['data']
@@ -52,9 +51,17 @@ class Mgdb:
         if len(data) ==0:
             return
         for item in data:
-            _idx = item.get('idx') or item.get('股票代码')
-            updates.append(UpdateOne({"idx": _idx}, {
-                           '$set': item}, upsert=True))
+            if _idx := item.get('idx'):
+                key = 'idx'
+            elif _idx := item.get('股票代码'):
+                key = '股票代码'
+            else:
+                key = None
+            if key is not None:
+                updates.append(UpdateOne({_idx: key},
+                                         {'$set': item},
+                                         upsert=True)
+                                )
         try:
             res = self.mongodb_client[db][collection].bulk_write(updates)
             return res
