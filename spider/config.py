@@ -4,7 +4,7 @@ celery config
 import os
 from celery import Celery
 
-from db import Mgdb
+from .db import Mgdb
 
 # app data dir 
 app_data_dir = os.getenv('APP_DTA_DIR', './data')

@@ -22,7 +22,7 @@ class Mgdb:
         self.mongo_password = os.getenv('APP_MONGO_PASSWORD') or 'example'
         self.mongo_host = os.getenv('APP_MONGO_HOST') or '123.249.37.220'
         self.mongo_port = os.getenv('APP_MONGO_PORT') or 27017
-        self.default_db = 'db'
+        self.default_db = 'default'
         _user = quote_plus(self.mongo_user)
         _pass = quote_plus(self.mongo_password)
         uri = f"mongodb://{_user}:{_pass}@{self.mongo_host}"
@@ -84,14 +84,10 @@ class Mgdb:
         获取最新的所有股票数据
         """
         try:
-            # 获取所有集合名称
-            collections = self.mongodb_client['realtime'].list_collection_names()
-            # 获取最新的集合名称
-            latest_collection = sorted(filter(lambda item: regex.match(item), collections))[-1]
             # 查询数据
             data = []
-            for item in self.mongodb_client['realtime'][latest_collection].find():
-                code = item['idx'].split('@')[1]
+            for item in self.mongodb_client['default']['all'].find():
+                code = {'idx': item['idx'], 'code': item['代码']}
                 data.append(code)
             return data
         except Exception as e:

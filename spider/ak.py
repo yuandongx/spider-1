@@ -3,8 +3,8 @@
 from datetime import datetime
 from loguru import logger
 
-from fetch.ak import get_realtime_data , get_stock_zh_a_history
-from config import mgdb
+from .fetch.ak import get_realtime_data , get_stock_zh_a_history
+from .config import mgdb
 
 def realtime():
     """
@@ -58,17 +58,16 @@ def update_history():
     codes = mgdb.get_latest_all_stock()
     logger.info(f"获取最新的所有股票数据: {len(codes)}")
     records = []
-    for symbol in codes:
+    for item in codes:
         try:
-            data = get_stock_zh_a_history(symbol, limit=10)
-
-            records.append({'代码': symbol, '历史': data})
+            data = get_stock_zh_a_history(item['code'], limit=60)
+            records.append({'idx': item['idx'], '历史': data})
         except Exception as e:
-            logger.error(f"获取股票 {symbol} 历史数据失败: {e}")
+            logger.error(f"获取股票 {item['idx']} 历史数据失败: {e}")
 
             continue
     payload = {
-        "db": "history_no_good",
+        "db": "default",
         "collection": 'all',
         "data": records
     }

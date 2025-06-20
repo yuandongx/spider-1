@@ -50,15 +50,14 @@ def get_stock_zh_a_history(symbol="000001", q=0, limit=0):
     end_date = f"{now.year}{now.month:0>2}{now.day:0>2}"
     period = "daily"
     adjust = "qfq"
-    _symbol = symbol[2:]  # 去掉前缀
-    logger.info(f"获取股票 {symbol}【{_symbol}】 日历史数据，时间范围: {start_date} - {end_date}")
+    logger.info(f"获取股票 {symbol}【{symbol}】 日历史数据，时间范围: {start_date} - {end_date}")
     # 获取历史数据
     if q==0:
-        stock_zh_a_hist_df = ak.stock_zh_a_hist(symbol=_symbol, period=period, start_date=start_date, adjust=adjust, end_date=end_date)
+        stock_zh_a_hist_df = ak.stock_zh_a_hist(symbol=symbol, period=period, start_date=start_date, adjust=adjust, end_date=end_date)
     elif q==1:
-        stock_zh_a_hist_df = ak.stock_zh_a_daily(symbol=_symbol, start_date=start_date, adjust=adjust, end_date=end_date)
+        stock_zh_a_hist_df = ak.stock_zh_a_daily(symbol=symbol, start_date=start_date, adjust=adjust, end_date=end_date)
     elif q==2:
-        stock_zh_a_hist_df = ak.stock_zh_a_hist_tx(symbol=_symbol, start_date=start_date, adjust=adjust, end_date=end_date)
+        stock_zh_a_hist_df = ak.stock_zh_a_hist_tx(symbol=symbol, start_date=start_date, adjust=adjust, end_date=end_date)
     if not stock_zh_a_hist_df.empty:
         logger.info(f"获取股票 {symbol}[{start_date}-{end_date}] 日历史数据成功，数据量: {stock_zh_a_hist_df.shape[0]}")
         # 处理数据
