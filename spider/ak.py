@@ -2,7 +2,6 @@
 # @Time    : 
 from datetime import datetime
 from loguru import logger
-from tqdm import tqdm
 
 from .fetch.ak import get_realtime_data , get_stock_zh_a_history
 from .config import mgdb
@@ -57,9 +56,11 @@ def update_history():
     _now = now.strftime('%Y-%m-%d %H:%M:%S')
     logger.info(f'{_now}|update_history is running...')
     codes = mgdb.get_latest_all_stock()
-    logger.info(f"获取最新的所有股票数据: {len(codes)}")
+    count = len(codes)
+    logger.info(f"获取最新的所有股票数据: {count}")
     records = []
-    for item in tqdm(codes):
+    for index, item in enumerate(codes):
+        logger.info(f"【{index+1}/{count}】获取股票 {item['idx']} 历史数据...")
         try:
             data = get_stock_zh_a_history(item['code'], limit=60)
             records.append({'idx': item['idx'], '历史': data})
