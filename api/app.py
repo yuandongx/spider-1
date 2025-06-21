@@ -19,7 +19,7 @@ async def db_lifespan(app: FastAPI):
     _pass = quote_plus(MONGO_PASSWORD)
     uri = f"mongodb://{_user}:{_pass}@{MONGO_HOST}"
     app.mongodb_client = AsyncIOMotorClient(uri)
-    app.database = app.mongodb_client.get_default_database('stocks')
+    app.database = app.mongodb_client.get_default_database('default')
     ping_response = await app.database.command("ping")
     if int(ping_response["ok"]) != 1:
         raise Exception("Problem connecting to database cluster.")
@@ -35,6 +35,7 @@ async def db_lifespan(app: FastAPI):
 app: FastAPI = FastAPI(
     root_path='/api/v1',
     lifespan=db_lifespan)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],          # 允许所有源域名（生产环境需替换为具体域名）

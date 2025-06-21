@@ -4,7 +4,7 @@ from loguru import logger
 from spider import app
 
 
-def on_starting(server):
+def start_celery():
     """
     Called just before the master process is initialized.
     
@@ -22,11 +22,13 @@ def on_starting(server):
 
     celery_schedule_file = os.getenv("CELERY_SCHEDULE_FILE") or "logs/celery.schedule.log"
 
-    logger.info('on server starting...')
+    logger.info('Celery is starting...')
 
     args = ["-A spider", "worker", "--concurrency 3", "--loglevel  info", f"--logfile {celery_worker_log}"]
     app.worker_main(args)
 
     args = ["-A spider", "beat", " --loglevel  info", f"--logfile {celery_beat_log}", f"--schedule {celery_schedule_file}", "--detach"]
     app.beat_main(args)
-    
+
+if __name__ == '__main__':
+    start_celery()
