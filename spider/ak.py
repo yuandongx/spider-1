@@ -55,7 +55,7 @@ def update_history():
     """
     now = datetime.now()
     _now = now.strftime('%Y-%m-%d %H:%M:%S')
-    logger.info(f'{_now}|ak_history_retry is running...')
+    logger.info(f'{_now}|update_history is running...')
     codes = mgdb.get_latest_all_stock()
     logger.info(f"获取最新的所有股票数据: {len(codes)}")
     records = []
@@ -65,7 +65,6 @@ def update_history():
             records.append({'idx': item['idx'], '历史': data})
         except Exception as e:
             logger.error(f"获取股票 {item['idx']} 历史数据失败: {e}")
-
             continue
     payload = {
         "db": "default",
