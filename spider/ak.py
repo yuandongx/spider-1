@@ -52,13 +52,17 @@ def update_history():
     """
     获取历史数据重试
     """
+    
     now = datetime.now()
     _now = now.strftime('%Y-%m-%d %H:%M:%S')
     logger.info(f'{_now}|update_history is running...')
     codes = mgdb.get_latest_all_stock()
+    error_row = mgdb.find('default', 'error_history')
+    codes = error_row + codes
     count = len(codes)
     logger.info(f"获取最新的所有股票数据: {count}")
     records = []
+    errors = []
     for index, item in enumerate(codes):
         logger.info(f"【{index+1}/{count}】获取股票 {item['idx']} 历史数据...")
         try:
@@ -66,13 +70,20 @@ def update_history():
             records.append({'idx': item['idx'], '历史': data})
         except Exception as e:
             logger.error(f"获取股票 {item['idx']} 历史数据失败: {e}")
+            errors.append({'idx': item['idx'], 'code': item['code'], 'update_time': _now})
             continue
     payload = {
         "db": "default",
         "collection": 'all',
         "data": records
     }
+    error_history = {
+        "db": "default",
+        "collection": "error_history",
+        "data": errors
+    }
     mgdb.insert_or_update(payload)
+    mgdb.delete_many(error_history)
     # 获取所有股票数据
     uesed = datetime.now() - now
     logger.info(f"获取历史数据完成, 耗时: {uesed.total_seconds()}秒")
