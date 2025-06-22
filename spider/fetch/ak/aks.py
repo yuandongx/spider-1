@@ -85,9 +85,10 @@ def get_all_zh_stocks():
         # 处理数据
         tmp_df = df.copy()
         for col in tmp_df.columns:
-            tmp_df[col] = tmp_df[col].apply(sanitize_floats)
+            tmp_df[col] = tmp_df[col].apply(sanitize_dtypes)
         result.extend(tmp_df.to_dict(orient='records'))
     return result
+
 if __name__ == '__main__':
     res = get_realtime_data()
     print(res)
