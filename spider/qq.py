@@ -128,7 +128,7 @@ def fetch_qq_info(code: str) -> Any:
 
 if __name__ == "__main__":
     # Example usage
-    code = "sh600026"
+    code = "sh603300"
     stock_info = fetch_qq_info(code)
     if stock_info:
         logger.info(f"Fetched stock info for {code}: {stock_info}")

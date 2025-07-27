@@ -17,7 +17,7 @@ from loguru import logger
 from .fetch.ak import get_realtime_data
 from .fetch.sina import get_hq_node_data as get_sina_hq_data, NODES
 
-from .config import huey as app, mgdb
+from .config import app, mgdb
 
 
 @app.task

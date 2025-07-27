@@ -1,0 +1,5 @@
+### 查看当前日期时间
+GET http://localhost:8000/today
+
+### 查看某月的
+GET http://localhost:8000/month/2025/06

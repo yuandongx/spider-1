@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 
 import akshare as ak
 
-
 from .app import app
 
 
@@ -18,6 +17,7 @@ def sanitize_floats(obj):
     elif isinstance(obj, list):
         return [sanitize_floats(v) for v in obj]
     return obj
+
 
 @app.get("/ak/stock/sse_summary")
 async def get_stock_sse_summary():
@@ -34,6 +34,7 @@ async def get_stock_sse_summary():
         "statusCode": 404,
         "message": "not found"
     }
+
 
 @app.get("/ak/stock/szse_summary")
 async def stock_szse_summary():
@@ -63,12 +64,17 @@ async def get_stock_individual_info(symbol: str):
     """"
     "获取股票-个股信息"
     """
+    if not symbol.isdigit():
+        return {
+            "statusCode": 402,
+            "message": "invalid symbol"
+        }
     stock_individual_info_em_df = ak.stock_individual_info_em(symbol=symbol)
-    print(stock_individual_info_em_df)
     if not stock_individual_info_em_df.empty:
+        print(stock_individual_info_em_df.to_dict(orient='records'))
         return {
             "statusCode": 200,
-            "data": sanitize_floats(stock_individual_info_em_df.to_records())
+            "data": sanitize_floats(stock_individual_info_em_df.to_dict(orient='records'))
         }
     return {
         "statusCode": 404,
@@ -85,7 +91,7 @@ async def get_stock_bid_ask_em(symbol: str):
     if not stock_bid_ask_em_df.empty:
         return {
             "statusCode": 200,
-            "data": sanitize_floats(stock_bid_ask_em_df.to_dict())
+            "data": sanitize_floats(stock_bid_ask_em_df.to_dict(orient='records'))
         }
     return {
         "statusCode": 404,
@@ -122,24 +128,25 @@ async def get_stock_realtime(tag: str, page: int = 1, page_size: int = 100, sort
     return result
 
 
-
 @app.get("/ak/stock/history/")
-async def get_stock_zh_a_history(symbol="000001", 
+async def get_stock_zh_a_history(symbol="000001",
                                  period="daily",
                                  start_date="20500101",
-                                 end_date="20250401", 
+                                 end_date="20250401",
                                  adjust="qfq",
-                                #  timeout=None,
+                                 #  timeout=None,
                                  q=0):
     """
     获取股票-个股历史行情
     """
-    if q==0:
-        stock_zh_a_hist_df = ak.stock_zh_a_hist(symbol=symbol, period=period, start_date=start_date, adjust=adjust, end_date=end_date)
-    elif q==1:
+    if q == 0:
+        stock_zh_a_hist_df = ak.stock_zh_a_hist(symbol=symbol, period=period, start_date=start_date, adjust=adjust,
+                                                end_date=end_date)
+    elif q == 1:
         stock_zh_a_hist_df = ak.stock_zh_a_daily(symbol=symbol, start_date=start_date, adjust=adjust, end_date=end_date)
-    elif q==2:
-        stock_zh_a_hist_df = ak.stock_zh_a_hist_tx(symbol=symbol, start_date=start_date, adjust=adjust, end_date=end_date)
+    elif q == 2:
+        stock_zh_a_hist_df = ak.stock_zh_a_hist_tx(symbol=symbol, start_date=start_date, adjust=adjust,
+                                                   end_date=end_date)
     if not stock_zh_a_hist_df.empty:
         return {
             "statusCode": 200,

@@ -1,7 +1,6 @@
 """
 get method
 """
-from pymongo import DESCENDING, ASCENDING
 from .app import app
 
 

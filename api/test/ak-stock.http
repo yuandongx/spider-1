@@ -1,0 +1,13 @@
+###
+GET http://localhost:8000/ak/stock/sse_summary
+
+
+###
+GET http://localhost:8000/ak/stock/szse_summary
+
+### 个股基本面信息
+GET  http://localhost:8000/ak/stock/individual_info/600571
+
+
+### 个股买卖信息
+GET http://localhost:8000/ak/stock/bid_ask_em/600571
