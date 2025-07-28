@@ -24,10 +24,10 @@ def start_celery():
 
     logger.info('Celery is starting...')
 
-    args = ["-A", "spider", "worker", "--concurrency=3", "--loglevel  info", f"--logfile {celery_worker_log}"]
+    args = ["-A", "spider", "worker", "--concurrency=3", "-l info", f"--logfile {celery_worker_log}"]
     app.worker_main(args)
 
-    args = ["-A", "spider", "beat", " --loglevel  info", f"--logfile {celery_beat_log}", f"--schedule {celery_schedule_file}", "--detach"]
+    args = ["-A", "spider", "beat", "-l  info", f"--logfile {celery_beat_log}", f"--schedule {celery_schedule_file}", "--detach"]
     app.beat_main(args)
 
 if __name__ == '__main__':
