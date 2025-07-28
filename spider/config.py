@@ -28,5 +28,7 @@ app.conf.update(
     result_serializer='json',
     timezone='Asia/Shanghai',
     enable_utc=True,
+    broker_connection_retry_on_startup=True,
+    broker_connection_max_retries=3,
 )
 
