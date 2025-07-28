@@ -56,6 +56,8 @@ class Mgdb:
                 key = 'idx'
             elif _idx := item.get('股票代码'):
                 key = '股票代码'
+            elif _idx := item.get('code'):
+                key = 'code'
             else:
                 key = None
             if key is not None:

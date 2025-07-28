@@ -5,6 +5,11 @@ from decimal import getcontext
 import requests
 from loguru import logger
 
+try:
+    from .config import mgdb
+except ImportError:
+    from config import mgdb  # Adjust import based on your project structure
+
 NAMES = ['index',
          'name',
          'code',
@@ -115,12 +120,19 @@ def fetch_qq_info(code: str) -> Any:
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
-        data = response.text.strip()
+        data = response.text.strip().replace('"', '')
         if '=' in data and len(data) < 20:
             logger.error(f"Unexpected data format for code {code}: {data}")
             return None
         data = data.split('=')[1].split('~')
-        return map_qq_data(data)
+        data = map_qq_data(data)
+        payload = {
+                "db": "stocks",
+                "collection": "qq_daily_info",
+                "data": [data]
+            }
+        mgdb.insert_or_update(payload)
+        return data
     except requests.RequestException as e:
         logger.error(f"Error fetching data for code {code}: {e}")
         return None
