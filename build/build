@@ -24,4 +24,4 @@ docker build -f ./build/Dockerfile -t $image .
 
 cd /home/develop/workspace
 sed -i "s@image: spider.*@image: $image@g" docker-compose.yml
-# docker-compose -p spider up --force-recreate
+docker-compose -p spider up --force-recreate
